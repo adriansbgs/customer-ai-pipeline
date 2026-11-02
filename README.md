@@ -142,4 +142,17 @@ curl -X POST http://localhost:8080/webhook/incoming-message \
 
 ## 5. Penggunaan AI dalam pengerjaan
 
-<!-- TODO kandidat: isi sendiri -->
+Hampir seluruh proyek ini dikerjakan dengan bantuan AI (Claude Code), memakai alur *spec-driven*: spesifikasi dan rencana ditulis dulu, lalu kode dan tes dibuat mengikutinya. Saya sengaja menyebutnya terus terang.
+
+**Dikerjakan AI:**
+- Menganalisis soal, menulis spesifikasi desain dan rencana implementasi (`docs/superpowers/`).
+- Menulis seluruh kode Kotlin/Ktor, `schema.sql`, Docker, halaman dashboard, dan 50 tes otomatis (tes ditulis lebih dulu, lalu kodenya).
+- Menulis draf README ini dan menjalankan review kode akhir oleh agen terpisah, lalu memperbaiki temuannya.
+
+**Keputusan dan pekerjaan saya:**
+- Memilih Kotlin + Ktor (bahasa yang saya kuasai) dan PostgreSQL via Docker Compose.
+- Memutuskan AI dimock dulu (batas waktu 8 detik), n8n dan deploy ditunda, dan memilih skenario mock serta mode demo fallback.
+- Menentukan aturan: data pelanggan ikut terhapus saat pelanggan dihapus, normalisasi nomor telepon (termasuk kasus `+62`, `62`, `0`), dan fokus keamanan (dua header secret, tanpa rahasia di repo).
+- Menjalankan dan mencoba aplikasi sendiri: dashboard, webhook lewat curl, dan demo fallback `mock-slow`.
+
+**Verifikasi:** semua tes lulus, dan README ini diuji dari clone baru. Karena kode dibuat AI, bagian yang paling perlu dibaca ulang adalah `Phone.kt`, `Repository.kt`, `Auth.kt`, dan `WebhookRoutes.kt`.
