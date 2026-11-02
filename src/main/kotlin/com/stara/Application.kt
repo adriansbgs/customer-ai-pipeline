@@ -24,5 +24,6 @@ fun Application.module(config: Config, db: Db, ai: ReplyGenerator) {
     installSecurityHeaders()
     routing {
         customerRoutes(db, config.adminApiKey)
+        webhookRoutes(db, ai, config)
     }
 }
