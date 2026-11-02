@@ -1,5 +1,6 @@
 package com.stara
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.sql.ResultSet
 import java.time.OffsetDateTime
@@ -7,10 +8,10 @@ import java.time.OffsetDateTime
 @Serializable
 data class Message(
     val id: Long,
-    val customerId: Long,
+    @SerialName("customer_id") val customerId: Long,
     val direction: String,
     val content: String,
-    val createdAt: String,
+    @SerialName("created_at") val createdAt: String,
 )
 
 @Serializable
@@ -19,7 +20,7 @@ data class Customer(
     val name: String,
     val phone: String,
     val status: String,
-    val createdAt: String,
+    @SerialName("created_at") val createdAt: String,
     val messages: List<Message>? = null,
 )
 
