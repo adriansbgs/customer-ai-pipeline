@@ -19,7 +19,7 @@ fun loadConfig(env: Map<String, String>): Config {
         env[name]?.takeIf { it.isNotBlank() } ?: throw IllegalStateException("$name must be set (see .env.example)")
 
     val aiProvider = env["AI_PROVIDER"]?.takeIf { it.isNotBlank() } ?: "mock"
-    if (aiProvider != "mock") throw IllegalStateException("AI_PROVIDER '$aiProvider' is not supported, use 'mock'")
+    if (aiProvider !in AI_PROVIDERS) throw IllegalStateException("AI_PROVIDER '$aiProvider' is not supported, use one of $AI_PROVIDERS")
 
     return Config(
         port = env["PORT"]?.toIntOrNull() ?: 8080,

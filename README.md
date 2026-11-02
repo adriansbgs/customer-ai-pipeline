@@ -41,7 +41,8 @@ docker compose up -d db
 | AI | Mock (`MockReplyGenerator`) | Lihat di bawah. |
 | Tes | `kotlin.test` + Ktor test host | Tes HTTP sungguhan terhadap database tes, tanpa pustaka tambahan. |
 
-**Kenapa AI dimock.** Penyedia AI nyata belum dipilih. Mock membalas dalam Bahasa Indonesia, sopan, maksimal 3 kalimat, dan memakai kalimat berbeda bila sudah ada riwayat percakapan. Semua AI berada di balik antarmuka `ReplyGenerator` (`src/main/kotlin/com/stara/Ai.kt`), jadi menambah Gemini/Claude/lainnya berarti satu implementasi baru yang membaca `AI_API_KEY` dan prompt sistem di `src/main/resources/prompts/system.txt`, lalu dipilih lewat `AI_PROVIDER`.
+**Kenapa AI dimock.** Penyedia AI nyata belum dipilih. Mock membalas dalam Bahasa Indonesia, sopan, maksimal 3 kalimat. Ia mengenali tiga topik lewat kata kunci (harga, jam buka, komplain); di luar itu ia memakai balasan umum yang berbeda bila sudah ada riwayat percakapan. Semua AI berada di balik antarmuka `ReplyGenerator` (`src/main/kotlin/com/stara/Ai.kt`), jadi menambah Gemini/Claude/lainnya berarti satu implementasi baru yang membaca `AI_API_KEY` dan prompt sistem di `src/main/resources/prompts/system.txt`, lalu dipilih lewat `AI_PROVIDER`.
+Untuk mendemokan balasan cadangan, set `AI_PROVIDER=mock-error` (selalu gagal) atau `mock-slow` (selalu melewati batas waktu) di `.env`, lalu `docker compose up -d`. Kembalikan ke `mock` setelahnya.
 Batas tunggu AI adalah `AI_TIMEOUT_MS` (default 8000 ms). Bila AI gagal, lambat, atau membalas kosong, pesan tetap tersimpan dan balasan cadangan dikirim: *"Terima kasih, tim kami akan segera menghubungi Anda."*
 
 **Konteks percakapan.** Sebelum pesan baru disimpan, 5 pesan terakhir pelanggan diambil dan dikirim ke AI sebagai riwayat.

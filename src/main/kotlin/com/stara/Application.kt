@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 fun main() {
     val config = loadConfig(readEnv())
     val db = Db(config.databaseUrl, config.dbUser, config.dbPassword)
-    val ai = MockReplyGenerator()
+    val ai = aiFor(config.aiProvider)
     embeddedServer(Netty, port = config.port) { module(config, db, ai) }.start(wait = true)
 }
 

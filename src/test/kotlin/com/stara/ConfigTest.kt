@@ -33,6 +33,11 @@ class ConfigTest {
     }
 
     @Test
+    fun `accepts demo ai providers`() {
+        listOf("mock-slow", "mock-error").forEach { assertEquals(it, loadConfig(base + ("AI_PROVIDER" to it)).aiProvider) }
+    }
+
+    @Test
     fun `reads dotenv and lets real env win`() {
         val file = kotlin.io.path.createTempFile().toFile().apply {
             writeText("# komentar\nFOO_STARA_TEST=dari-file\n\nPATH=palsu\n")

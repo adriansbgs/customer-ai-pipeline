@@ -23,6 +23,33 @@ class AiTest {
     }
 
     @Test
+    fun `mock answers by topic`() = runBlocking {
+        val mock = MockReplyGenerator()
+        val price = mock.generate(emptyList(), "Berapa HARGA paketnya?")
+        val hours = mock.generate(emptyList(), "Jam buka kapan ya")
+        val complaint = mock.generate(emptyList(), "Saya kecewa, barangnya rusak")
+        val other = mock.generate(emptyList(), "Halo")
+        assertContains(price, "paket")
+        assertContains(hours, "Senin")
+        assertContains(complaint, "maaf")
+        listOf(price, hours, complaint).forEach { assertTrue(sentences(it) in 1..3, it) }
+        assertEquals(4, setOf(price, hours, complaint, other).size)
+    }
+
+    @Test
+    fun `topic wins over history`() = runBlocking {
+        val reply = MockReplyGenerator().generate(listOf(msg("halo")), "berapa harga?")
+        assertContains(reply, "paket")
+    }
+
+    @Test
+    fun `demo providers always fall back`() = runBlocking {
+        assertEquals(FALLBACK_REPLY, replyOrFallback(aiFor("mock-error"), emptyList(), "x", 1000))
+        assertEquals(FALLBACK_REPLY, replyOrFallback(aiFor("mock-slow"), emptyList(), "x", 100))
+        assertEquals(MockReplyGenerator::class, aiFor("mock")::class)
+    }
+
+    @Test
     fun `failure falls back`() = runBlocking {
         val failing = object : ReplyGenerator {
             override suspend fun generate(history: List<Message>, incoming: String): String = error("boom")
