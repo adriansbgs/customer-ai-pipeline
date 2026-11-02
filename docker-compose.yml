@@ -17,5 +17,16 @@ services:
       timeout: 3s
       retries: 20
 
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/stara
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   pgdata:
