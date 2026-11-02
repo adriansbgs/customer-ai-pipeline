@@ -50,6 +50,14 @@ class AiTest {
     }
 
     @Test
+    fun `reply longer than the message limit falls back`() = runBlocking {
+        val verbose = object : ReplyGenerator {
+            override suspend fun generate(history: List<Message>, incoming: String) = "a".repeat(2001)
+        }
+        assertEquals(FALLBACK_REPLY, replyOrFallback(verbose, emptyList(), "x", 1000))
+    }
+
+    @Test
     fun `system prompt is loaded`() {
         assertContains(SYSTEM_PROMPT, "STARA")
     }

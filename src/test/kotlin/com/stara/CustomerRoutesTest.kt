@@ -4,6 +4,9 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.client.statement.HttpResponse
 import io.ktor.server.testing.ApplicationTestBuilder
 import kotlinx.serialization.json.jsonArray
@@ -52,6 +55,18 @@ class CustomerRoutesTest {
     fun `malformed or mistyped json returns 400`() = withApp {
         assertEquals(400, create("{bukan json").status.value)
         assertEquals(400, create("""{"name":"A","phone":812}""").status.value)
+    }
+
+    @Test
+    fun `non-json content type returns 415 not 500`() = withApp {
+        // Ktor's ContentNegotiation answers 415 itself (empty body) before our handler runs.
+        val res = client.post("/customers") {
+            admin()
+            contentType(ContentType.Text.Plain)
+            setBody("""{"name":"A","phone":"081234567890"}""")
+        }
+        assertEquals(415, res.status.value)
+        assertEquals(0, listCustomers(db, null).size)
     }
 
     @Test

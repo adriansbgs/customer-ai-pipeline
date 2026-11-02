@@ -26,7 +26,7 @@ fun Route.webhookRoutes(db: Db, ai: ReplyGenerator, config: Config) {
             val phone = normalizePhone(input.phone) ?: throw ApiException(HttpStatusCode.BadRequest, "phone is invalid")
             val text = input.message?.trim().orEmpty()
             if (text.isEmpty()) throw ApiException(HttpStatusCode.BadRequest, "message is required")
-            if (text.length > 2000) throw ApiException(HttpStatusCode.BadRequest, "message must be at most 2000 characters")
+            if (text.length > MAX_MESSAGE_LENGTH) throw ApiException(HttpStatusCode.BadRequest, "message must be at most $MAX_MESSAGE_LENGTH characters")
             val name = input.name?.trim().orEmpty()
             if (name.length > 100) throw ApiException(HttpStatusCode.BadRequest, "name must be at most 100 characters")
 
