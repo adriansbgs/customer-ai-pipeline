@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STARA Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>STARA Dashboard</h1>
+    <button id="logout" type="button" hidden>Ganti API key</button>
+</header>
+
+<section id="login" hidden>
+    <form id="login-form">
+        <label for="api-key">API key</label>
+        <input id="api-key" type="password" autocomplete="off" required>
+        <button type="submit">Masuk</button>
+    </form>
+    <p id="login-error" class="error"></p>
+</section>
+
+<main id="app" hidden>
+    <section class="panel">
+        <div class="panel-head">
+            <h2>Pelanggan</h2>
+            <button id="reload" type="button">Muat ulang</button>
+        </div>
+        <table>
+            <thead><tr><th>Nama</th><th>Telepon</th><th>Status</th></tr></thead>
+            <tbody id="customer-rows"></tbody>
+        </table>
+        <p id="list-empty" class="muted" hidden>Belum ada pelanggan.</p>
+
+        <h3>Tambah pelanggan</h3>
+        <form id="add-form">
+            <label>Nama <input name="name" required maxlength="100"></label>
+            <label>Telepon <input name="phone" required placeholder="0812…"></label>
+            <label>Status
+                <select name="status">
+                    <option value="lead">lead</option>
+                    <option value="active">active</option>
+                    <option value="inactive">inactive</option>
+                </select>
+            </label>
+            <button type="submit">Tambah</button>
+        </form>
+        <p id="add-error" class="error"></p>
+    </section>
+
+    <section class="panel">
+        <h2 id="chat-title">Percakapan</h2>
+        <p id="chat-empty" class="muted">Pilih pelanggan untuk melihat riwayat percakapannya.</p>
+        <ol id="chat"></ol>
+    </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
