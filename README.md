@@ -35,9 +35,9 @@ docker compose up -d db
 | Bagian | Pilihan | Alasan |
 |---|---|---|
 | Bahasa & server | Kotlin + Ktor 3 | Bahasa yang paling saya kuasai; Ktor ringan dan cukup untuk REST, webhook, dan file statis dalam satu aplikasi. |
-| Database | PostgreSQL 17 via Docker Compose | Sesuai saran soal. Supabase cukup dengan mengganti `DATABASE_URL`, tanpa ubah kode. |
+| Database | PostgreSQL 17 via Docker Compose | Pilihan default. Supabase cukup dengan mengganti `DATABASE_URL`, tanpa ubah kode. |
 | Akses DB | JDBC biasa + `PreparedStatement` | Tanpa ORM supaya setiap query terlihat dan mudah dijelaskan; semua query berparameter (aman dari SQL injection). |
-| Web | HTML + CSS + JavaScript biasa | Soal hanya butuh halaman fungsional; tanpa build step dan tanpa framework. |
+| Web | HTML + CSS + JavaScript biasa | Kebutuhannya hanya halaman fungsional; tanpa build step dan tanpa framework. |
 | AI | Mock (`MockReplyGenerator`) | Lihat di bawah. |
 | Tes | `kotlin.test` + Ktor test host | Tes HTTP sungguhan terhadap database tes, tanpa pustaka tambahan. |
 
@@ -138,7 +138,7 @@ curl -X POST http://localhost:8080/webhook/incoming-message \
 - **Deploy** (belum ada VPS/hosting) beserta HTTPS lewat reverse proxy.
 - **Rate limiting** pada webhook dan API.
 - **Race condition** kecil: dua webhook pertama untuk nomor baru yang sama pada saat bersamaan bisa membuat permintaan kedua mendapat 409 (data tetap aman karena `UNIQUE`). Perbaikannya `INSERT … ON CONFLICT`.
-- Pool koneksi database (saat ini satu koneksi per query; cukup untuk skala tes ini).
+- Pool koneksi database (saat ini satu koneksi per query; cukup untuk skala saat ini).
 
 ## 5. Penggunaan AI dalam pengerjaan
 
@@ -153,8 +153,8 @@ Hampir seluruh proyek ini dikerjakan dengan bantuan AI (Claude Code), memakai al
 - Menjalankan dan mencoba aplikasi sendiri: dashboard, webhook lewat curl, dan demo fallback `mock-slow`.
 
 **Diusulkan AI, saya setujui (desain rinci):**
-- Pembagian file dan lapisan (`Repository`, `Errors`, `Auth`, dan lainnya), antarmuka `ReplyGenerator`, format error seragam, konteks 5 pesan, dan header keamanan (CSP, `nosniff`). Alasannya tercatat di `docs/superpowers/specs/`.
+- Pembagian file dan lapisan (`Repository`, `Errors`, `Auth`, dan lainnya), antarmuka `ReplyGenerator`, format error seragam, konteks 5 pesan, dan header keamanan (CSP, `nosniff`).
 
 **Dikerjakan AI (implementasi):**
-- Menulis spesifikasi dan rencana (`docs/superpowers/`), seluruh kode Kotlin/Ktor, `schema.sql`, Docker, halaman dashboard, dan 50 tes otomatis (tes ditulis lebih dulu, lalu kodenya).
+- Menulis spesifikasi dan rencana, seluruh kode Kotlin/Ktor, `schema.sql`, Docker, halaman dashboard, dan 50 tes otomatis (tes ditulis lebih dulu, lalu kodenya).
 - Menulis draf README ini, menjalankan review kode akhir oleh agen terpisah, lalu memperbaiki temuannya.
