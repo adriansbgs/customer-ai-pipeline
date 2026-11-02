@@ -43,7 +43,7 @@ fun testConfig(aiTimeoutMs: Long = 200) = Config(
     adminApiKey = ADMIN_KEY,
 )
 
-fun withApp(ai: ReplyGenerator = object : ReplyGenerator {}, block: suspend ApplicationTestBuilder.() -> Unit) =
+fun withApp(ai: ReplyGenerator = MockReplyGenerator(), block: suspend ApplicationTestBuilder.() -> Unit) =
     testApplication {
         application { module(testConfig(), testDb(), ai) }
         block()
