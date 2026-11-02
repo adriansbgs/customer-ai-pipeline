@@ -142,17 +142,21 @@ curl -X POST http://localhost:8080/webhook/incoming-message \
 
 ## 5. Penggunaan AI dalam pengerjaan
 
-Hampir seluruh proyek ini dikerjakan dengan bantuan AI (Claude Code), memakai alur *spec-driven*: spesifikasi dan rencana ditulis dulu, lalu kode dan tes dibuat mengikutinya. Saya sengaja menyebutnya terus terang.
+Hampir seluruh proyek ini dikerjakan dengan bantuan AI (Claude Code), memakai alur *spec-driven*: spesifikasi dan rencana ditulis dulu, lalu kode dan tes dibuat mengikutinya. Saya merancang sistem ini bersama AI: saya menentukan arah dan aturan, AI mengusulkan desain rincinya dan saya menyetujuinya.
 
-**Dikerjakan AI:**
-- Menganalisis soal, menulis spesifikasi desain dan rencana implementasi (`docs/superpowers/`).
-- Menulis seluruh kode Kotlin/Ktor, `schema.sql`, Docker, halaman dashboard, dan 50 tes otomatis (tes ditulis lebih dulu, lalu kodenya).
-- Menulis draf README ini dan menjalankan review kode akhir oleh agen terpisah, lalu memperbaiki temuannya.
-
-**Keputusan dan pekerjaan saya:**
-- Memilih Kotlin + Ktor (bahasa yang saya kuasai) dan PostgreSQL via Docker Compose.
-- Memutuskan AI dimock dulu (batas waktu 8 detik), n8n dan deploy ditunda, dan memilih skenario mock serta mode demo fallback.
-- Menentukan aturan: data pelanggan ikut terhapus saat pelanggan dihapus, normalisasi nomor telepon (termasuk kasus `+62`, `62`, `0`), dan fokus keamanan (dua header secret, tanpa rahasia di repo).
+**Keputusan saya (arah dan aturan):**
+- Stack: Kotlin + Ktor (bahasa yang saya kuasai), PostgreSQL via Docker Compose, dan dashboard HTML/JS biasa.
+- Ruang lingkup: AI dimock dulu dengan batas waktu 8 detik; n8n dan deploy ditunda. Saya juga memilih skenario mock dan mode demo fallback.
+- Aturan data: menghapus pelanggan ikut menghapus semua datanya (pesan), karena data pelanggan harus bersih saat dihapus.
+- Kasus tepi nomor telepon (`+62`, `62`, `0` saja) dan normalisasi ke format `+62`.
+- Keamanan sebagai fokus: tanpa rahasia di repo, dan autentikasi dua header secret. Saya sempat mengusulkan 2FA; saya sepakat menundanya dan mencatatnya sebagai pekerjaan lanjutan.
 - Menjalankan dan mencoba aplikasi sendiri: dashboard, webhook lewat curl, dan demo fallback `mock-slow`.
+
+**Diusulkan AI, saya setujui (desain rinci):**
+- Pembagian file dan lapisan (`Repository`, `Errors`, `Auth`, dan lainnya), antarmuka `ReplyGenerator`, format error seragam, konteks 5 pesan, dan header keamanan (CSP, `nosniff`). Alasannya tercatat di `docs/superpowers/specs/`.
+
+**Dikerjakan AI (implementasi):**
+- Menulis spesifikasi dan rencana (`docs/superpowers/`), seluruh kode Kotlin/Ktor, `schema.sql`, Docker, halaman dashboard, dan 50 tes otomatis (tes ditulis lebih dulu, lalu kodenya).
+- Menulis draf README ini, menjalankan review kode akhir oleh agen terpisah, lalu memperbaiki temuannya.
 
 **Verifikasi:** semua tes lulus, dan README ini diuji dari clone baru. Karena kode dibuat AI, bagian yang paling perlu dibaca ulang adalah `Phone.kt`, `Repository.kt`, `Auth.kt`, dan `WebhookRoutes.kt`.
