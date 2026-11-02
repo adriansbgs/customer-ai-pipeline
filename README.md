@@ -158,5 +158,3 @@ Hampir seluruh proyek ini dikerjakan dengan bantuan AI (Claude Code), memakai al
 **Dikerjakan AI (implementasi):**
 - Menulis spesifikasi dan rencana (`docs/superpowers/`), seluruh kode Kotlin/Ktor, `schema.sql`, Docker, halaman dashboard, dan 50 tes otomatis (tes ditulis lebih dulu, lalu kodenya).
 - Menulis draf README ini, menjalankan review kode akhir oleh agen terpisah, lalu memperbaiki temuannya.
-
-**Verifikasi:** semua tes lulus, dan README ini diuji dari clone baru. Karena kode dibuat AI, bagian yang paling perlu dibaca ulang adalah `Phone.kt`, `Repository.kt`, `Auth.kt`, dan `WebhookRoutes.kt`.
